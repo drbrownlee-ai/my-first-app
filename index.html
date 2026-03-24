@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob shape-1"></div>
+        <div class="blob shape-2"></div>
+        <div class="blob shape-3"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>My Tasks</h1>
+            <p id="date-display">Today</p>
+        </header>
+
+        <form id="todo-form">
+            <div class="input-group">
+                <input type="text" id="todo-input" placeholder="What needs to be done?" autocomplete="off" required>
+                <button type="submit" id="add-btn"><i class="fas fa-plus"></i></button>
+            </div>
+        </form>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="pending">Pending</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+
+        <ul id="todo-list">
+            <!-- Tasks will be added here -->
+        </ul>
+        
+        <div class="todo-stats">
+            <span id="task-counter">0 tasks left</span>
+            <button id="clear-completed">Clear completed</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

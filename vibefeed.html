@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeFeed - WIV Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-main: #212529;
+            --text-muted: #868E96;
+            --border-color: #E9ECEF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            position: relative;
+            padding-top: 60px; /* space for navbar */
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar-content {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .write-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+        }
+
+        .write-btn:hover {
+            color: var(--primary-color);
+            background-color: rgba(255, 107, 107, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* Feed Container */
+        .feed {
+            padding: 16px 0;
+        }
+
+        /* Card */
+        .card {
+            background-color: var(--card-bg);
+            margin-bottom: 20px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 24px 20px 20px;
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        @media (min-width: 600px) {
+            .card {
+                border-radius: 20px;
+                border: 1px solid var(--border-color);
+                margin: 0 16px 20px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            }
+        }
+
+        /* Card Header */
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 14px;
+            background-color: var(--border-color);
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+        }
+
+        .time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Card Body */
+        .card-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            white-space: pre-wrap;
+            color: #343A40;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            color: var(--primary-color);
+            background-color: rgba(255, 107, 107, 0.08);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tag:hover {
+            background-color: rgba(255, 107, 107, 0.15);
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            gap: 24px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .action-btn i {
+            font-size: 1.3rem;
+            margin-right: 8px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .action-btn:active i {
+            transform: scale(0.8);
+        }
+
+        .action-btn.like-btn.liked {
+            color: var(--primary-color);
+        }
+
+        .action-btn.like-btn.liked i {
+            font-weight: 900;
+        }
+
+        .action-btn:hover {
+            color: var(--text-muted);
+        }
+
+        .action-btn.like-btn:hover {
+            color: #ff5252;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 0 20px 16px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Heart Animation */
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .action-btn.like-btn i.pop {
+            animation: heartPop 0.3s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="logo">VibeFeed</a>
+            <button class="write-btn" aria-label="글쓰기">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <div class="category-tabs" id="category-tabs">
+            <button class="tab-btn active" data-category="전체">전체</button>
+            <button class="tab-btn" data-category="오늘의배움">#오늘의배움</button>
+            <button class="tab-btn" data-category="프로젝트진행">#프로젝트진행</button>
+            <button class="tab-btn" data-category="고민상담">#고민상담</button>
+            <button class="tab-btn" data-category="자유">#자유</button>
+        </div>
+        <div class="feed" id="feed-container">
+            <!-- Cards will be rendered here by JS -->
+        </div>
+    </div>
+
+    <script>
+        const initialPosts = [
+            {
+                id: 1,
+                author: "김지윤",
+                avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+                time: "10분 전",
+                content: "오늘 디자인 시스템 기초 세팅을 마무리했어요! ✨ 컬러 팔레트 맞추는 게 생각보다 오래 걸렸지만 뿌듯하네요. 다들 프로젝트 어디까지 진행하셨나요?",
+                category: ["프로젝트진행", "오늘의배움"],
+                likes: 12,
+                comments: 3,
+                isLiked: false
+            },
+            {
+                id: 2,
+                author: "이지은",
+                avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+                time: "1시간 전",
+                content: "프론트엔드와 백엔드 API 연결 중인데 CORS 에러 때문에 멘붕이에요 ㅠㅠ 혹시 해결해보신 분 꿀팁 공유 부탁드려요 🙏",
+                category: ["고민상담"],
+                likes: 8,
+                comments: 5,
+                isLiked: true
+            },
+            {
+                id: 3,
+                author: "박서연",
+                avatar: "https://i.pravatar.cc/150?u=a04258114e29026302d",
+                time: "3시간 전",
+                content: "바이브코딩 팀원들이랑 첫 오프라인 모임 가졌어요! 🍕 맛있는 피자 먹으면서 아이디어 회의하니까 기발한 생각들이 마구 샘솟네요 ㅎㅎ 우리 팀 남은 기간 파이팅!!",
+                category: ["자유", "프로젝트진행"],
+                likes: 24,
+                comments: 7,
+                isLiked: false
+            },
+            {
+                id: 4,
+                author: "최유리",
+                avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
+                time: "5시간 전",
+                content: "최근에 React Query 도입해봤는데 데이터 캐싱이 이렇게 편할 줄 몰랐네요. 상태 관리 코드가 반으로 줄었어요! 다음 빌더톤 때도 무조건 써야겠습니다 😆",
+                category: ["오늘의배움"],
+                likes: 18,
+                comments: 2,
+                isLiked: false
+            },
+            {
+                id: 5,
+                author: "정민지",
+                avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
+                time: "어제",
+                content: "드디어 WIV 커뮤니티 기획안 확정하고 개발 시작합니다! 밤샘 코딩 예약이네요 💻 커피 한 잔 내리고 달립니다. 위브 참가자분들 모두 파이팅해요~",
+                category: ["프로젝트진행", "자유"],
+                likes: 35,
+                comments: 10,
+                isLiked: true
+            }
+        ];
+
+        let currentCategory = '전체';
+
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            const filteredPosts = currentCategory === '전체' 
+                ? initialPosts 
+                : initialPosts.filter(post => post.category.includes(currentCategory));
+                
+            container.innerHTML = filteredPosts.map(post => `
+                <article class="card">
+                    <div class="card-header">
+                        <img src="${post.avatar}" alt="${post.author}님의 프로필" class="avatar">
+                        <div class="user-info">
+                            <span class="username">${post.author}</span>
+                            <span class="time">${post.time}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        ${post.content}
+                    </div>
+                    
+                    <div class="tags">
+                        ${post.category.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                    
+                    <div class="card-actions">
+                        <button class="action-btn like-btn ${post.isLiked ? 'liked' : ''}" onclick="toggleLike(this)">
+                            <i class="${post.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                            <span class="count">${post.likes}</span>
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="fa-regular fa-message"></i>
+                            <span class="count">${post.comments}</span>
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            const icon = btn.querySelector('i');
+            const countSpan = btn.querySelector('.count');
+            let count = parseInt(countSpan.textContent);
+            
+            if (btn.classList.contains('liked')) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                count++;
+                
+                // Add pop animation
+                icon.classList.remove('pop');
+                void icon.offsetWidth; // trigger reflow
+                icon.classList.add('pop');
+                setTimeout(() => icon.classList.remove('pop'), 300);
+            } else {
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                count--;
+            }
+            countSpan.textContent = count;
+        }
+
+        // Initialize feed and tabs
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFeed();
+            
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentCategory = tab.dataset.category;
+                    renderFeed();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

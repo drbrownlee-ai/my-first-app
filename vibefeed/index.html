@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VibeFeed - 바이브피드</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+        <!-- 메인 콘텐츠 영역 (동적 렌더링) -->
+        <main id="main-content">
+            <!-- 초기 로딩 화면 -->
+            <div class="loading-screen">
+                <div class="loader"></div>
+                <h1>VibeFeed</h1>
+            </div>
+        </main>
+
+        <!-- 하단 네비게이션 바 -->
+        <nav id="bottom-nav">
+            <button class="nav-item active" data-page="home">
+                <span class="material-icons-outlined">explore</span>
+                <span>Discovery</span>
+            </button>
+            <button class="nav-item create-btn" data-page="post">
+                <div class="create-icon">
+                    <span class="material-icons-outlined">add</span>
+                </div>
+            </button>
+            <button class="nav-item" data-page="insights">
+                <span class="material-icons-outlined">insights</span>
+                <span>My Vibe</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
