@@ -7,6 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCompletedBtn = document.getElementById('clear-completed');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const dateDisplay = document.getElementById('date-display');
+    const themeToggle = document.getElementById('theme-toggle');
+
+    // Theme logic
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        document.body.classList.add(currentTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // Fallback to system preference if no saved theme
+        document.body.classList.add('dark-mode');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        
+        let theme = 'light';
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark-mode';
+        }
+        localStorage.setItem('theme', theme);
+    });
 
     // State
     let todos = JSON.parse(localStorage.getItem('todos')) || [];
